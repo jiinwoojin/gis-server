@@ -21,4 +21,7 @@ RUN yum install -y git && \
     wget https://download.osgeo.org/geos/geos-3.8.0.tar.bz2 && \
     wget http://download.osgeo.org/gdal/2.4.4/gdal-2.4.4.tar.gz
 
-RUN ls -all
+RUN tar -zxvf gcc-7.5.0.tar.gz && \
+    tar -xvf geos-3.8.0.tar.bz2 && \
+    tar -zxvf gdal-2.4.4.tar.gz && \
+    ls -all
