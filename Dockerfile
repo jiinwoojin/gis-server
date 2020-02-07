@@ -7,7 +7,8 @@ RUN mkdir -p /app/jiserver/source
 
 WORKDIR /app/jiserver/source
 
-RUN git clone https://github.com/jiinwoojin/mapproxy.git && \
+RUN yum install -y git && \
+    git clone https://github.com/jiinwoojin/mapproxy.git && \
     git clone https://github.com/jiinwoojin/mapserver.git && \
     git clone https://github.com/jiinwoojin/tegola.git && \
     git clone https://github.com/jiinwoojin/mapnik.git && \
