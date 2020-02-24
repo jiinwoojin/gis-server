@@ -24,12 +24,12 @@ RUN mkdir -p ${ROOTDIR}/source
 
 WORKDIR ${ROOTDIR}/source
 
-RUN yum update && yum install -y git bzip2 gcc-c++ wget unzip make sqlite3 sqlite3-devel openssl openssl-devel  \
+RUN yum update -y && yum install -y git bzip2 gcc-c++ wget unzip make sqlite3 sqlite3-devel openssl openssl-devel  \
         autoconf perl-Test-Harness perl-Thread-Queue automake autogen-libopts libtool \
-        keyutils-libs-devel krb5-devel libcom_err-devel libkadm5 && \
+        keyutils-libs-devel krb5-devel libcom_err-devel libkadm5 libselinux-devel libsepol-devel \
+        libverto-devel pcre-devel zlib-devel krb5-libs rhash rhash-devel jsoncpp jsoncpp-devel libuv libuv-devel && \
     git clone https://github.com/jiinwoojin/mapproxy.git && \
     git clone https://github.com/jiinwoojin/mapserver.git && \
-    yum install -y wget && \
     wget http://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.gz && \
     wget https://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz && \
     wget https://download.osgeo.org/proj/proj-datumgrid-1.8.zip && \
