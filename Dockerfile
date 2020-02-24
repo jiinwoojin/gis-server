@@ -22,7 +22,7 @@ RUN mkdir -p ${ROOTDIR}/source
 
 WORKDIR ${ROOTDIR}/source
 
-RUN yum install -y git bzip2 gcc-c++ wget zip && \
+RUN yum install -y git bzip2 gcc-c++ wget unzip && \
     git clone https://github.com/jiinwoojin/mapproxy.git && \
     git clone https://github.com/jiinwoojin/mapserver.git && \
     yum install -y wget && \
@@ -32,7 +32,7 @@ RUN yum install -y git bzip2 gcc-c++ wget zip && \
     wget https://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 && \
     wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz && \
     wget http://www.cmake.org/files/v3.9/cmake-${CMAKE_VERSION}.tar.gz && \
-    wget https://ftp.postgresql.org/pub/source/v12.1/postgresql-${POSTGRESQL_VERSION}.tar.gz && \
+    wget https://ftp.postgresql.org/pub/source/v${POSTGRESQL_VERSION}/postgresql-${POSTGRESQL_VERSION}.tar.gz && \
     wget http://postgis.net/stuff/postgis-${POSTGIS_VERSION}.tar.gz
 
 RUN tar -zxvf gcc-${GCC_VERSION}.tar.gz && \
@@ -44,3 +44,12 @@ RUN tar -zxvf gcc-${GCC_VERSION}.tar.gz && \
     tar -zxvf proj-${PROJ_VERSION}.tar.gz && \
     unzip proj-datumgrid-1.8.zip -d ${ROOTDIR}/source/proj-datumgrid-1.8 && \
     ls -all
+
+WORKDIR ${ROOTDIR}/source/gcc-${GCC_VERSION}
+
+RUN yum -y install texinfo perl-Text-Unidecode perl-libintl expect libgnat libgnat-devel gcc-gnat binutils-devel && \
+    ./contrib/download_prerequisites
+    ./configure --disable-shared --enable-static --disable-multilib --enable-languages=c,c++ && \
+    make -j8
+    make -j8 install
+    gcc --version
