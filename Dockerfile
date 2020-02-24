@@ -11,7 +11,8 @@ ENV ROOTDIR=/app/jiserver \
     GDAL_VERSION="2.4.4" \
     CMAKE_VERSION="3.9.6" \
     POSTGRESQL_VERSION="12.1" \
-    POSTGIS_VERSION="3.0.0"
+    POSTGIS_VERSION="3.0.0" \
+    LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64:/usr/lib:/usr/lib64
 
 ENV GCC_PATH=${ROOTDIR}/gcc-${GCC_VERSION} \
     PROJ_PATH=${ROOTDIR}/proj-${PROJ_VERSION} \
@@ -24,8 +25,8 @@ RUN mkdir -p ${ROOTDIR}/source
 
 WORKDIR ${ROOTDIR}/source
 
-RUN yum update -y && yum install -y git bzip2 libstdc++-devel gcc-c++ wget unzip make sqlite3 sqlite3-devel openssl openssl-devel  \
-        autoconf perl-Test-Harness perl-Thread-Queue automake autogen-libopts libtool \
+RUN yum update -y && yum install -y git bzip2 cpp gcc libstdc++-devel gcc-c++ wget unzip make sqlite3 sqlite3-devel openssl openssl-devel  \
+        autoconf perl-Test-Harness perl-Thread-Queue automake autogen-libopts libtool zlib-devel libtool-ltdl-devel \
         keyutils-libs-devel krb5-devel libcom_err-devel libkadm5 libselinux-devel libsepol-devel \
         libverto-devel pcre-devel zlib-devel krb5-libs rhash rhash-devel jsoncpp jsoncpp-devel libuv libuv-devel && \
     git clone https://github.com/jiinwoojin/mapproxy.git && \
@@ -51,9 +52,16 @@ RUN tar -zxf gcc-${GCC_VERSION}.tar.gz && \
 
 WORKDIR ${ROOTDIR}/source/gcc-${GCC_VERSION}
 
-RUN yum -y install texinfo perl-Text-Unidecode perl-libintl expect libgnat libgnat-devel gcc-gnat binutils-devel && \
+RUN yum -y install texinfo perl-Text-Unidecode perl-libintl expect libgnat libgnat-devel gcc-gnat binutils-devel file-libs  && \
     ./contrib/download_prerequisites && \
-    ./configure --disable-shared --enable-static --disable-multilib --enable-languages=c,c++ && \
+    ./configure --disable-multilib --enable-languages=c,c++ --enable-checking=release && \
     make -j4 && \
     make -j4 install && \
     gcc --version
+
+WORKDIR ${ROOTDIR}/source/cmake-${CMAKE_VERSION}
+
+RUN ./bootstrap && \
+    make -j4 && \
+    make -j4 install && \
+    cmake --version
