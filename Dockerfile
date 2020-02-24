@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # mapproxy + mapserver
+
 FROM centos:7
 MAINTAINER JIIN System <jiinwoojin@gmail.com>
 
@@ -10,8 +11,9 @@ ENV ROOTDIR=/app/jiserver \
     GDAL_VERSION="2.4.4" \
     CMAKE_VERSION="3.9.6" \
     POSTGRESQL_VERSION="12.1" \
-    POSTGIS_VERSION="3.0.0" \
-    GCC_PATH=${ROOTDIR}/gcc-${GCC_VERSION} \
+    POSTGIS_VERSION="3.0.0"
+
+ENV GCC_PATH=${ROOTDIR}/gcc-${GCC_VERSION} \
     PROJ_PATH=${ROOTDIR}/proj-${PROJ_VERSION} \
     GEOS_PATH=${ROOTDIR}/geos-${GEOS_VERSION} \
     GDAL_PATH=${ROOTDIR}/gdal-${GDAL_VERSION} \
@@ -22,7 +24,9 @@ RUN mkdir -p ${ROOTDIR}/source
 
 WORKDIR ${ROOTDIR}/source
 
-RUN yum install -y git bzip2 gcc-c++ wget unzip make && \
+RUN yum update && yum install -y git bzip2 gcc-c++ wget unzip make sqlite3 sqlite3-devel openssl openssl-devel  \
+        autoconf perl-Test-Harness perl-Thread-Queue automake autogen-libopts libtool \
+        keyutils-libs-devel krb5-devel libcom_err-devel libkadm5 && \
     git clone https://github.com/jiinwoojin/mapproxy.git && \
     git clone https://github.com/jiinwoojin/mapserver.git && \
     yum install -y wget && \
@@ -50,6 +54,6 @@ WORKDIR ${ROOTDIR}/source/gcc-${GCC_VERSION}
 RUN yum -y install texinfo perl-Text-Unidecode perl-libintl expect libgnat libgnat-devel gcc-gnat binutils-devel && \
     ./contrib/download_prerequisites && \
     ./configure --disable-shared --enable-static --disable-multilib --enable-languages=c,c++ && \
-    make -j8 && \
-    make -j8 install && \
+    make -j4 && \
+    make -j4 install && \
     gcc --version
