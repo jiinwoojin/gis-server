@@ -48,8 +48,8 @@ RUN tar -zxvf gcc-${GCC_VERSION}.tar.gz && \
 WORKDIR ${ROOTDIR}/source/gcc-${GCC_VERSION}
 
 RUN yum -y install texinfo perl-Text-Unidecode perl-libintl expect libgnat libgnat-devel gcc-gnat binutils-devel && \
-    ./contrib/download_prerequisites
+    ./contrib/download_prerequisites && \
     ./configure --disable-shared --enable-static --disable-multilib --enable-languages=c,c++ && \
-    make -j8
-    make -j8 install
+    make -j8 && \
+    make -j8 install && \
     gcc --version
