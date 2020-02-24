@@ -22,7 +22,7 @@ RUN mkdir -p ${ROOTDIR}/source
 
 WORKDIR ${ROOTDIR}/source
 
-RUN yum install -y git bzip2 gcc-c++ wget unzip && \
+RUN yum install -y git bzip2 gcc-c++ wget unzip make && \
     git clone https://github.com/jiinwoojin/mapproxy.git && \
     git clone https://github.com/jiinwoojin/mapserver.git && \
     yum install -y wget && \
@@ -35,13 +35,13 @@ RUN yum install -y git bzip2 gcc-c++ wget unzip && \
     wget https://ftp.postgresql.org/pub/source/v${POSTGRESQL_VERSION}/postgresql-${POSTGRESQL_VERSION}.tar.gz && \
     wget http://postgis.net/stuff/postgis-${POSTGIS_VERSION}.tar.gz
 
-RUN tar -zxvf gcc-${GCC_VERSION}.tar.gz && \
-    tar -xvf geos-${GEOS_VERSION}.tar.bz2 && \
-    tar -zxvf gdal-${GDAL_VERSION}.tar.gz && \
-    tar -zxvf cmake-${CMAKE_VERSION}.tar.gz && \
-    tar -zxvf postgresql-${POSTGRESQL_VERSION}.tar.gz && \
-    tar -zxvf postgis-${POSTGIS_VERSION}.tar.gz && \
-    tar -zxvf proj-${PROJ_VERSION}.tar.gz && \
+RUN tar -zxf gcc-${GCC_VERSION}.tar.gz && \
+    tar -xf geos-${GEOS_VERSION}.tar.bz2 && \
+    tar -zxf gdal-${GDAL_VERSION}.tar.gz && \
+    tar -zxf cmake-${CMAKE_VERSION}.tar.gz && \
+    tar -zxf postgresql-${POSTGRESQL_VERSION}.tar.gz && \
+    tar -zxf postgis-${POSTGIS_VERSION}.tar.gz && \
+    tar -zxf proj-${PROJ_VERSION}.tar.gz && \
     unzip proj-datumgrid-1.8.zip -d ${ROOTDIR}/source/proj-datumgrid-1.8 && \
     ls -all
 
