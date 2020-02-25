@@ -28,6 +28,8 @@ ADD ./rpm/* ./
 WORKDIR ${ROOTDIR}/source
 
 RUN yum -y update && yum -y install scl-utils centos-release-scl git wget bzip2 zip unzip make && \
+    wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
+    rpm -Uvh epel-release-latest-7.noarch.rpm && \
     yum -y install devtoolset-7
 
 SHELL [ "/usr/bin/scl", "enable", "devtoolset-7" ]
@@ -85,7 +87,7 @@ RUN yum -y install sqlite sqlite-devel autoconf perl-Test-Harness perl-Thread-Qu
                     harfbuzz harfbuzz-devel graphite2-devel ruby-irb ruby-libs rubygem-bigdecimal \
                     rubygem-io-console rubygem-json rubygem-psych rubygem-rdoc rubygems ruby ruby-devel \
                     pycairo-devel libzip php-cli php-common php php-devel php-fpm librsvg2 gdk-pixbuf2-devel \
-                    librsvg2-devel librsvg2-tools python-yaml python-lxml
+                    librsvg2-devel librsvg2-tools python-yaml python-lxml proj proj-devel proj-epsg proj-nad geos-devel
 
 WORKDIR ${ROOTDIR}/rpm
 
