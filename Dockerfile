@@ -84,17 +84,17 @@ RUN yum -y install sqlite sqlite-devel autoconf perl-Test-Harness perl-Thread-Qu
                     mesa-khr-devel mesa-libEGL-devel mesa-libGL-devel pixman-devel cairo cairo-devel fribidi fribidi-devel \
                     harfbuzz harfbuzz-devel graphite2-devel ruby-irb ruby-libs rubygem-bigdecimal \
                     rubygem-io-console rubygem-json rubygem-psych rubygem-rdoc rubygems ruby ruby-devel \
-                    pycairo-devel libzip php-cli php-common php php-devel php-fpm spawn-fcgi librsvg2 gdk-pixbuf2-devel \
-                    librsvg2-devel librsvg2-tools python2-pip python-yaml python-lxml python-shapely pyproj
+                    pycairo-devel libzip php-cli php-common php php-devel php-fpm librsvg2 gdk-pixbuf2-devel \
+                    librsvg2-devel librsvg2-tools python-yaml python-lxml
 
 WORKDIR ${ROOTDIR}/rpm
 
 RUN yum -y localinstall agg-devel-2.5-18.el7.x86_64.rpm arpack-3.1.3-2.el7.x86_64.rpm arpack-devel-3.1.3-2.el7.x86_64.rpm bison-devel-3.0.4-2.el7.x86_64.rpm \
             cfitsio-3.370-10.el7.x86_64.rpm cfitsio-devel-3.370-10.el7.x86_64.rpm CharLS-1.0-5.el7.x86_64.rpm CharLS-devel-1.0-5.el7.x86_64.rpm \
             cryptopp-5.6.2-10.el7.x86_64.rpm cryptopp-devel-5.6.2-10.el7.x86_64.rpm fcgi-2.4.0-25.el7.x86_64.rpm fcgi-devel-2.4.0-25.el7.x86_64.rpm \
-            flex-devel-2.5.37-6.el7.x86_64.rpm freexl-1.0.5-1.el7.x86_64.rpm freexl-devel-1.0.5-1.el7.x86_64.rpm \
-            libdap-3.13.1-2.el7.x86_64.rpm libdap-devel-3.13.1-2.el7.x86_64.rpm \
-            libmemcached-devel-1.0.16-5.el7.x86_64.rpm libzstd-1.4.4-1.el7.x86_64.rpm libzstd-devel-1.4.4-1.el7.x86_64.rpm
+            flex-devel-2.5.37-6.el7.x86_64.rpm freexl-1.0.5-1.el7.x86_64.rpm freexl-devel-1.0.5-1.el7.x86_64.rpm python2-pip-8.1.2-10.el7.noarch.rpm \
+            libdap-3.13.1-2.el7.x86_64.rpm libdap-devel-3.13.1-2.el7.x86_64.rpm spawn-fcgi-1.6.3-5.el7.x86_64.rpm python-shapely-1.5.2-2.el7.x86_64.rpm \
+            libmemcached-devel-1.0.16-5.el7.x86_64.rpm libzstd-1.4.4-1.el7.x86_64.rpm libzstd-devel-1.4.4-1.el7.x86_64.rpm pyproj-1.9.2-6.20120712svn300.el7.x86_64.rpm
 
 WORKDIR ${ROOTDIR}/source/proj
 
@@ -113,9 +113,9 @@ RUN ./configure --enable-depend --enable-nls=ko --with-openssl \
                 --with-libxslt --with-zlib --with-ossp-uuid && \
     make all -j8 && make -j8 install && cd contrib && make all -j8 && make -j8 install
 
-ENV LD_LIBRARY_PATH=/usr/local/pgsql/lib:${LD_LIBRARY_PATH}
-ENV PKG_CONFIG_PATH=/usr/local/pgsql/lib/pkgconfig
-ENV PATH=/usr/local/pgsql/bin:${PATH}
+ENV LD_LIBRARY_PATH=/usr/local/pgsql/lib:${LD_LIBRARY_PATH} \
+    PKG_CONFIG_PATH=/usr/local/pgsql/lib/pkgconfig \
+    PATH=/usr/local/pgsql/bin:${PATH}
 
 WORKDIR ${ROOTDIR}/source/gdal-${GDAL_VERSION}
 
@@ -161,7 +161,6 @@ RUN mkdir build && cd build && \
           -DWITH_PERL=ON \
           -DWITH_PROTOBUF=ON \
           -DWITH_POSTGIS=ON \
-          -DWITH_PYTHON=ON \
           .. && \
     make -j8 && make -j8 install && ldconfig && mapserv -v
 
