@@ -85,7 +85,7 @@ RUN yum -y install sqlite sqlite-devel autoconf perl-Test-Harness perl-Thread-Qu
                     harfbuzz harfbuzz-devel graphite2-devel ruby-irb ruby-libs rubygem-bigdecimal \
                     rubygem-io-console rubygem-json rubygem-psych rubygem-rdoc rubygems ruby ruby-devel \
                     pycairo-devel libzip php-cli php-common php php-devel php-fpm spawn-fcgi librsvg2 gdk-pixbuf2-devel \
-                    librsvg2-devel librsvg2-tools
+                    librsvg2-devel librsvg2-tools python2-pip python-yaml python-lxml python-shapely pyproj
 
 WORKDIR ${ROOTDIR}/rpm
 
@@ -161,5 +161,17 @@ RUN mkdir build && cd build && \
           -DWITH_PERL=ON \
           -DWITH_PROTOBUF=ON \
           -DWITH_POSTGIS=ON \
+          -DWITH_PYTHON=ON \
           .. && \
     make -j8 && make -j8 install && ldconfig && mapserv -v
+
+WORKDIR ${ROOTDIR}/source/mapproxy
+
+RUN pip install --upgrade pip && pip install Pillow && pip freeze && \
+    python setup.py build && python setup.py install
+
+WORKDIR ${ROOTDIR}
+
+RUN rm -rf ./source ./rpm
+
+EXPOSE 8080
